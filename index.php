@@ -2,8 +2,11 @@
 session_start();
 $uc = filter_input(INPUT_GET, 'uc') == null ? "home" : filter_input(INPUT_GET, 'uc'); // affiche la page accueil par défaut
 
+ini_set('display_errors', 1);
 // afichage du header
 include 'vues/header.php';
+
+include 'models/PDO.php';
 
 // Gestion des affichages
 switch ($uc) {
@@ -18,3 +21,5 @@ switch ($uc) {
 
 // afichage du footer
 include 'vues/footer.php';
+
+error_reporting(E_ALL);
