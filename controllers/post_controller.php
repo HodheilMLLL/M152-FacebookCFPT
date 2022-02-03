@@ -5,6 +5,12 @@ switch ($action) {
         include 'vues/post.php';
         break;
     case 'post':
+        $commentaire = filter_input(INPUT_POST, 'commentaire', FILTER_SANITIZE_STRING);
+
+        $post = new Post();
+        $post->setCommentaire($commentaire);
+        Post::addPost($post);
+
         $dossier = 'upload';
         $taille_maxi = 3000000; // 3Mo en octets
         $extensions = array('.png', '.gif', '.jpg', '.jpeg');

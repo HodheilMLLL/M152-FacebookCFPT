@@ -1,13 +1,10 @@
 <?php
-class AllPosts
+class Post
 {
     private $idPost;
     private $commentaire;
     private $creationDate;
     private $modificationDate;
-    private $media_idMedia;
-
-    
 
     /**
      * Get the value of idPost
@@ -15,18 +12,6 @@ class AllPosts
     public function getIdPost()
     {
         return $this->idPost;
-    }
-
-    /**
-     * Set the value of idPost
-     *
-     * @return  self
-     */ 
-    public function setIdPost($idPost)
-    {
-        $this->idPost = $idPost;
-
-        return $this;
     }
 
     /**
@@ -58,18 +43,6 @@ class AllPosts
     }
 
     /**
-     * Set the value of creationDate
-     *
-     * @return  self
-     */ 
-    public function setCreationDate($creationDate)
-    {
-        $this->creationDate = $creationDate;
-
-        return $this;
-    }
-
-    /**
      * Get the value of modificationDate
      */ 
     public function getModificationDate()
@@ -77,41 +50,17 @@ class AllPosts
         return $this->modificationDate;
     }
 
-    /**
-     * Set the value of modificationDate
-     *
-     * @return  self
-     */ 
-    public function setModificationDate($modificationDate)
-    {
-        $this->modificationDate = $modificationDate;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of media_idMedia
-     */ 
-    public function getMedia_idMedia()
-    {
-        return $this->media_idMedia;
-    }
-
-    /**
-     * Set the value of media_idMedia
-     *
-     * @return  self
-     */ 
-    public function setMedia_idMedia($media_idMedia)
-    {
-        $this->media_idMedia = $media_idMedia;
-
-        return $this;
-    }
-
     // Insérer de nouvelles données
-    public static function newPost(AllPosts $post){
-
+    public static function addPost(Post $post){
+        $commentaire = $post->getCommentaire();
+        $creationDate = date("Y/m/d/H/i/s");
+        $modificationDate = date("Y/m/d/H/i/s");
+        
+        $req = MonPdo::getInstance()->prepare("INSERT INTO post(commentaire, creationDate, modificationDate) VALUES(:commentaire, :creationDate, :modificationDate)");
+        $req->bindParam(':commentaire',$commentaire);
+        $req->bindParam(':creationDate',$creationDate);
+        $req->bindParam(':modificationDate',$modificationDate);
+        $req->execute();
     }
 }
 
