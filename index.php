@@ -7,8 +7,8 @@ ini_set('display_errors', 1);
 include 'vues/header.php';
 
 include 'models/PDO.php';
-include 'models/AllPosts.php';
-include 'models/AllMedias.php';
+include 'models/Post.php';
+include 'models/Media.php';
 
 // Gestion des affichages
 switch ($uc) {
