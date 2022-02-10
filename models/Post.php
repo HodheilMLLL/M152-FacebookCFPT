@@ -61,6 +61,18 @@ class Post
         $req->bindParam(':creationDate',$creationDate);
         $req->bindParam(':modificationDate',$modificationDate);
         $req->execute();
+
+        return MonPdo::getInstance()->lastInsertId();
+    }
+
+    // Fonction qui permet récuperer les données
+    public static function getAllPosts(): array{
+        $sql = MonPdo::getInstance()->prepare("SELECT * FROM post");
+        $sql->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE,'Post');
+        $sql->execute();
+        $retourSQL=$sql->fetchAll();
+
+        return $retourSQL;
     }
 }
 

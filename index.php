@@ -2,13 +2,18 @@
 session_start();
 $uc = filter_input(INPUT_GET, 'uc') == null ? "home" : filter_input(INPUT_GET, 'uc'); // affiche la page accueil par défaut
 
+$_SESSION['messageAlert']['type'] = null;
+$_SESSION['messageAlert']['message'] = null;
+
 ini_set('display_errors', 1);
-// afichage du header
-include 'vues/header.php';
+
 
 include 'models/PDO.php';
 include 'models/Post.php';
 include 'models/Media.php';
+
+// afichage du header
+include 'vues/header.php';
 
 // Gestion des affichages
 switch ($uc) {
