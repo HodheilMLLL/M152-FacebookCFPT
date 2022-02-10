@@ -10,12 +10,8 @@
 				<div class="panel panel-default">
 					<div class="panel-thumbnail"><img src="assets/img/bg_5.jpg" class="img-responsive"></div>
 					<div class="panel-body">
-						<p class="lead">Urbanization</p>
-						<p>45 Followers, 13 Posts</p>
-
-						<p>
-							<img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px">
-						</p>
+						<p class="lead">The Big Dodos</p>
+						<p>4,6M Followers, <?= Post::countAllPosts() ?> Posts</p>
 					</div>
 				</div>
 			</div>

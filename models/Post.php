@@ -74,6 +74,16 @@ class Post
 
         return $retourSQL;
     }
+
+    // Fonction qui permet récuperer le nombre de posts
+    public static function countAllPosts(){
+        $sql = MonPdo::getInstance()->prepare("SELECT * FROM post");
+        $sql->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE,'Post');
+        $sql->execute();
+        $count = $sql->rowCount(); 
+
+        return $count;
+    }
 }
 
 ?>
