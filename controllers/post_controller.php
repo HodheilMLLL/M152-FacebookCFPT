@@ -10,7 +10,7 @@ switch ($action) {
         try {
             //code...
 
-            $commentaire = filter_input(INPUT_POST, 'commentaire', FILTER_SANITIZE_STRING);
+            $commentaire = filter_input(INPUT_POST, 'commentaire', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
             $post = new Post();
             $post->setCommentaire($commentaire);
@@ -20,7 +20,7 @@ switch ($action) {
             $taille_maxi = 3000000; // 3Mo en octets
             $taille_tout = 0; // Taille de tous les fichiers que l'utilisteur veut uploader
             $taille_maxi_tout = 70000000; // 70Mo en octets
-            $extensions = array('.png', '.gif', '.jpg', '.jpeg');
+            $extensions = array('.png', '.gif', '.jpg', '.jpeg', '.mp4', '.mov', '.wmv', '.avi', '.mkv', '.webm');
             $countfiles = count($_FILES['myImg']['name']);
             
             unset($erreur);
@@ -44,7 +44,7 @@ switch ($action) {
                     MonPdo::getInstance()->rollBack();
                 }
 
-                if (!isset($erreur)) //S'il n'y a pas d'erreur, on upload
+                if (!isset($erreur)) // S'il n'y a pas d'erreur, on upload
                 {
                     $temp = explode(".", $_FILES["myImg"]["name"][$i]);
                     $newfilename = round(microtime(true)) . $i . '.' . end($temp);
@@ -78,16 +78,17 @@ switch ($action) {
             // Validation de la transaction
             MonPdo::getInstance()->commit();
         } catch (\Throwable $th) {
+            // Affichage d'un message d'erreur
             $_SESSION['messageAlert']['type'] = "danger";
             $_SESSION['messageAlert']['message'] = $erreur;
         }
 
         if (!isset($erreur)) // S'il aucune erreur n'a été rencontrée
         {
+            // Affichage d'un message de succès
             $_SESSION['messageAlert']['type'] = "success";
             $_SESSION['messageAlert']['message'] = "Votre post a été crée avec succès";
         }
-        
         include 'vues/post.php';
         break;
 }

@@ -67,7 +67,7 @@ class Post
 
     // Fonction qui permet récuperer les données
     public static function getAllPosts(): array{
-        $sql = MonPdo::getInstance()->prepare("SELECT * FROM post");
+        $sql = MonPdo::getInstance()->prepare("SELECT * FROM post ORDER BY creationDate DESC"); // Affiche le plus récent d'abord
         $sql->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE,'Post');
         $sql->execute();
         $retourSQL=$sql->fetchAll();

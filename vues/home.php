@@ -32,7 +32,23 @@
 					$countMedia = 0;
 					echo '<div class="media">';
 					foreach ($showMediaByPostId as $media) {
-						echo '<img class="media-object pull-left" src="upload/' . $media->getNomMedia() . '" width="300" />';
+						// Faire un switch en fonction de son type
+						switch (explode('/', $media->getTypeMedia())[0]) {
+							case "image":
+								// Images
+								echo '<img class="media-object pull-left" src="upload/' . $media->getNomMedia() . '" width="300"/>';
+								break;
+							case "video":
+								// Vidéos
+								echo '<video width="320" height="240" autoplay loop muted controls>
+								<source src="upload/' . $media->getNomMedia() .'" type="' . $media->getTypeMedia() .'" />
+							  	</video>';
+								break;
+							case "audio":
+								// Audios
+								break;
+						}
+
 						$countMedia++;
 					}
 					echo '</div></div></div>';
