@@ -84,6 +84,14 @@ class Post
 
         return $count;
     }
+
+    public static function removePostById(){
+        // Continuer ici
+
+        // Suppression du post
+
+        // Suppression des fichiers dans le dossier upload/ du post
+    }
 }
 
 ?>

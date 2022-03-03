@@ -23,6 +23,10 @@
 				foreach ($showAllPosts as $post) {
 					echo '<div class="panel panel-default">';
 					echo '<div class="panel-heading"><h4>' . $post->getCommentaire() . '</h4>
+					<span style="float: right;">
+					<button type="button" class="btn btn-success"><i class="fa fa-pencil"></i></button>
+					<button type="button" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+					</span>
 					<p><small>Posté le ' . $post->getCreationDate() . '</small></p>
 						</div>';
 					echo '<div class="panel-body">';
