@@ -20,7 +20,7 @@ switch ($action) {
             $taille_maxi = 3000000; // 3Mo en octets
             $taille_tout = 0; // Taille de tous les fichiers que l'utilisteur veut uploader
             $taille_maxi_tout = 70000000; // 70Mo en octets
-            $extensions = array('.png', '.gif', '.jpg', '.jpeg', '.mp4', '.mov', '.wmv', '.avi', '.mkv', '.webm');
+            $extensions = array('.png', '.gif', '.jpg', '.jpeg', '.mp4', '.mov', '.wmv', '.avi', '.mkv', '.webm', '.m4a', '.flac', '.mp3', '.wav', '.wma', '.aac');
             $countfiles = count($_FILES['myImg']['name']);
             
             unset($erreur);

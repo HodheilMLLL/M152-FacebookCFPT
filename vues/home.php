@@ -46,6 +46,9 @@
 								break;
 							case "audio":
 								// Audios
+								echo '<audio controls>
+								<source src="upload/' . $media->getNomMedia() . '" type="' . $media->getTypeMedia() .'">
+							  	</audio>';
 								break;
 						}
 
