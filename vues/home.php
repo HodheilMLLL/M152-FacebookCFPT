@@ -34,8 +34,8 @@
 				foreach ($showAllPosts as $post) {
 					echo '<div class="panel panel-default">';
 					echo '<div class="panel-heading"><h4>' . $post->getCommentaire() . '</h4>
-					<span style="float: right;">
-					<button type="button" class="btn btn-success" id="' . $post->getIdPost() . '"><i class="fa fa-pencil"></i></button>
+					<span style="float: right;">					
+					<a href="index.php?uc=post&action=update&idPost=' . $post->getIdPost() . '"><button type="button" class="btn btn-success" id="' . $post->getIdPost() . '"><i class="fa fa-pencil"></i></button></a>
 					<button type="button" class="btn btn-danger" id="' . $post->getIdPost() . '" data-toggle="modal" data-target="#ModalSuppression" data-whatever="@mdo" onClick="ChangeModalLink(' . $post->getIdPost() . ')"><i class="fa fa-trash"></i></button>
 					</span>
 					<p><small>Posté le ' . $post->getCreationDate() . '</small></p>

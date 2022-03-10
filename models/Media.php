@@ -132,7 +132,7 @@ class Media {
         $req->execute();
     }
 
-    // Récupérer une image par sont post_id
+    // Récupérer un media par sont post_id
     public static function getMediaByPostId($idPost){
         $req = MonPdo::getInstance()->prepare("SELECT * FROM media WHERE post_id = :post_id");
         $req->bindParam(':post_id', $idPost);
@@ -141,6 +141,15 @@ class Media {
         $res=$req->fetchAll();
 
         return $res;
+    }
+
+    // Supprime un media par sont post_id
+    public static function deleteMediaByPostId($idPost){
+        // Suppression du post
+        $req = MonPdo::getInstance()->prepare("DELETE FROM media WHERE post_id = :post_id");
+        $req->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Media');
+        $req->bindParam(':post_id', $idPost);
+        $req->execute();
     }
 }
 ?>

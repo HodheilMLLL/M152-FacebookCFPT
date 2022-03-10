@@ -74,6 +74,17 @@ class Post
 
         return $retourSQL;
     }
+    
+    // Récupérer un post par son id
+    public static function getPostById($idPost){
+        $req = MonPdo::getInstance()->prepare("SELECT * FROM post WHERE idPost = :idPost");
+        $req->bindParam(':idPost', $idPost);
+        $req->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE,'Post');
+        $req->execute();
+        $res=$req->fetch();
+
+        return $res;
+    }
 
     // Fonction qui permet récuperer le nombre de posts
     public static function countAllPosts(){
@@ -93,6 +104,15 @@ class Post
         $req->bindParam(':idPost', $idPost);
         $req->execute();
     }
-}
 
+    // Modifie un post par son id
+    public static function updatePostById($idPost, $commentaire){
+        $modificationDate = date("Y/m/d/H/i/s");
+        $req = MonPdo::getInstance()->prepare("UPDATE post SET commentaire = :commentaire,modificationDate = :modificationDate WHERE idPost = :idPost");
+        $req->bindParam(':idPost', $idPost);
+        $req->bindParam(':commentaire', $commentaire);
+        $req->bindParam(':modificationDate',$modificationDate);
+        $req->execute();
+    }
+}
 ?>
