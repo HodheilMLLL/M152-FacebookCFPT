@@ -100,11 +100,9 @@ switch ($action) {
         }
         include 'vues/post.php';
         break;
-    case 'delete':
+    case 'delete': // Suppression d'un post
         // Récupère l'id du post à supprimer
         $idPost = filter_input(INPUT_GET, 'idPost');
-
-        unset($erreur);
 
         // Lancement de la transaction
         MonPdo::getInstance()->beginTransaction();
@@ -123,8 +121,6 @@ switch ($action) {
         } catch (\Throwable $th) {
             // Si une erreur est rencontrée, annulation de la transaction
             MonPdo::getInstance()->rollBack();
-
-            $erreur = "Erreur lors de la suppression du post";
         }
 
         try {
@@ -133,9 +129,21 @@ switch ($action) {
         } catch (\Throwable $th) {
             // Affichage d'un message d'erreur
             $_SESSION['messageAlert']['type'] = "danger";
-            $_SESSION['messageAlert']['message'] = $erreur;
+            $_SESSION['messageAlert']['message'] = "Erreur lors de la suppression du post";
         }
 
         include 'vues/home.php';
+        break;
+    case 'update': // Modification d'un post
+        // Récupère l'id du post à modifier
+        $idPost = filter_input(INPUT_GET, 'idPost');
+
+        /*
+            Choses à faire (à modifier si besoin):
+                - Créer un page modifications OU modale de modification
+                - Afficher les informations du post pour l'utilisateur
+                - Si le bouton modifier est cliqué cela modifie le post avec les nouvelles informations
+                - Dossier upload : Supression des ancien medias en lien avec le post et ajout des nouveaux (Autre solution ?)
+        */
         break;
 }
