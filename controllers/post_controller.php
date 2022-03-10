@@ -1,5 +1,6 @@
 <?php
 $action = filter_input(INPUT_GET, 'action');
+$dossier = 'upload';
 switch ($action) {
     case 'show':
         include 'vues/post.php';
@@ -16,7 +17,7 @@ switch ($action) {
             $post->setCommentaire($commentaire);
             $idPost = Post::addPost($post);
 
-            $dossier = 'upload';
+
             $taille_maxi = 3000000; // 3Mo en octets
             $taille_tout = 0; // Taille de tous les fichiers que l'utilisteur veut uploader
             $taille_maxi_tout = 70000000; // 70Mo en octets
@@ -71,7 +72,6 @@ switch ($action) {
                 // Annulation de la transasction
                 $erreur = "Fichier(s) trop lourd(s)";
                 throw new Exception;
-                
             }
         } catch (\Throwable $th) {
             // Si une erreur est rencontrée, annulation de la transaction
@@ -88,7 +88,7 @@ switch ($action) {
 
             // Suppression des fichiers qui ont été crées
             foreach ($createdFiles as $file) {
-                unlink("$dossier/" .$file);
+                unlink("$dossier/" . $file);
             }
         }
 
@@ -99,5 +99,43 @@ switch ($action) {
             $_SESSION['messageAlert']['message'] = "Votre post a été crée avec succès";
         }
         include 'vues/post.php';
+        break;
+    case 'delete':
+        // Récupère l'id du post à supprimer
+        $idPost = filter_input(INPUT_GET, 'idPost');
+
+        unset($erreur);
+
+        // Lancement de la transaction
+        MonPdo::getInstance()->beginTransaction();
+
+        try {
+            // Récupère touts les medias en lien avec ce post
+            $allMedias = Media::getMediaByPostId($idPost);
+
+            // Suppression du post (cela supprimera aussi les medias côté bd car les medias sont ON DELETE CASCADE)
+            Post::deletePostById($idPost);
+
+            // Suppression des medias dans le dossier upload
+            foreach ($allMedias as $media) {
+                unlink("$dossier/" . $media->getNomMedia());
+            }
+        } catch (\Throwable $th) {
+            // Si une erreur est rencontrée, annulation de la transaction
+            MonPdo::getInstance()->rollBack();
+
+            $erreur = "Erreur lors de la suppression du post";
+        }
+
+        try {
+            // Validation de la transaction
+            MonPdo::getInstance()->commit();          
+        } catch (\Throwable $th) {
+            // Affichage d'un message d'erreur
+            $_SESSION['messageAlert']['type'] = "danger";
+            $_SESSION['messageAlert']['message'] = $erreur;
+        }
+
+        include 'vues/home.php';
         break;
 }

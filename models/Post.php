@@ -85,12 +85,13 @@ class Post
         return $count;
     }
 
-    public static function removePostById(){
-        // Continuer ici
-
+    // Supprime un post par son id
+    public static function deletePostById($idPost){
         // Suppression du post
-
-        // Suppression des fichiers dans le dossier upload/ du post
+        $req = MonPdo::getInstance()->prepare("DELETE FROM post WHERE idPost = :idPost");
+        $req->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Post');
+        $req->bindParam(':idPost', $idPost);
+        $req->execute();
     }
 }
 
