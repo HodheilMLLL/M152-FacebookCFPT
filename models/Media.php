@@ -143,12 +143,11 @@ class Media {
         return $res;
     }
 
-    // Supprime un media par sont post_id
-    public static function deleteMediaByPostId($idPost){
-        // Suppression du post
-        $req = MonPdo::getInstance()->prepare("DELETE FROM media WHERE post_id = :post_id");
+    // Supprime un media par sont id
+    public static function deleteMediaById($idMedia){
+        $req = MonPdo::getInstance()->prepare("DELETE FROM media WHERE idMedia = :idMedia");
         $req->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'Media');
-        $req->bindParam(':post_id', $idPost);
+        $req->bindParam(':idMedia', $idMedia);
         $req->execute();
     }
 }

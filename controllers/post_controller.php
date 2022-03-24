@@ -25,7 +25,7 @@ switch ($action) {
 
             unset($erreur);
 
-            $countfiles = count($_FILES['myImg']['name']);
+            $countfiles = count(array_filter($_FILES['myImg']['name']));
 
             for ($i = 0; $i < $countfiles; $i++) {
                 $fichier = $_FILES['myImg']['name'][$i];
@@ -134,12 +134,48 @@ switch ($action) {
 
         include 'vues/home.php';
         break;
+    case 'deleteMedia':
+        // Récupère l'id du media à supprimer
+        $idMedia = filter_input(INPUT_GET, 'idMedia');
+        $idPost = filter_input(INPUT_GET, 'idPost');
+        $nomMedia = filter_input(INPUT_GET, 'nomMedia');
+
+        // Lancement de la transaction
+        MonPdo::getInstance()->beginTransaction();
+
+        try {
+            // Suppression du media
+            Media::deleteMediaById($idMedia);
+
+            // Suppression du media dans le dossier upload
+            unlink("$dossier/" . $nomMedia);
+        } catch (\Throwable $th) {
+            // Si une erreur est rencontrée, annulation de la transaction
+            MonPdo::getInstance()->rollBack();
+        }
+
+        try {
+            // Validation de la transaction
+            MonPdo::getInstance()->commit();
+
+            // Affichage d'un message d'erreur
+            $_SESSION['messageAlert']['type'] = "success";
+            $_SESSION['messageAlert']['message'] = "Media supprimé avec succès";
+        } catch (\Throwable $th) {
+            // Affichage d'un message d'erreur
+            $_SESSION['messageAlert']['type'] = "danger";
+            $_SESSION['messageAlert']['message'] = "Erreur lors de la suppression du media";
+        }
+        include 'vues/update.php';
+        break;
     case 'update': // Affichage de la page de modification
         include 'vues/update.php';
         break;
     case 'confirmUpdate': // Modification d'un post
         $idPost = filter_input(INPUT_GET, 'idPost');
         $commentaire = filter_input(INPUT_POST, 'commentaire', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+        $newFiles = false;
 
         // Lancement de la transaction
         MonPdo::getInstance()->beginTransaction();
@@ -151,16 +187,10 @@ switch ($action) {
             // Modifie le post
             Post::updatePostById($idPost, $commentaire);
 
-            // Suppression des medias dans le dossier upload ainsi que dans la base de données
-            foreach ($allMedias as $media) {
-                unlink("$dossier/" . $media->getNomMedia());
-
-                Media::deleteMediaByPostId($media->getPost_id());
-            }
             // Insertion des nouvaux medias
             unset($erreur);
 
-            $countfiles = count($_FILES['myImg']['name']);
+            $countfiles = count(array_filter($_FILES['myImg']['name']));
 
             for ($i = 0; $i < $countfiles; $i++) {
                 $fichier = $_FILES['myImg']['name'][$i];
@@ -169,12 +199,15 @@ switch ($action) {
 
                 $extension = strrchr($fichier, '.');
 
+
                 if (!in_array($extension, $extensions)) //Si l'extension n'est pas dans le tableau
                 {
                     $erreur = 'Vous devez uploader un fichier de type png, gif, jpg ou jpeg';
                     // Annulation de la transaction
                     throw new Exception;
                 }
+
+
                 if ($taille > $taille_maxi) {
                     $erreur = "Taille de fichier(s) dépassant la limite";
                     // Annulation de la transaction
@@ -202,6 +235,7 @@ switch ($action) {
                     }
                 }
             }
+
             // Vérification du non-dépassement de la limite de 70Mo
             if ($taille_tout > $taille_maxi_tout) {
                 // Annulation de la transasction
@@ -227,7 +261,7 @@ switch ($action) {
             }
         }
 
-        if (!isset($erreur)) // S'il aucune erreur n'a été rencontrée
+        if (!isset($erreur)) // Si aucune erreur n'a été rencontrée
         {
             // Affichage d'un message de succès
             $_SESSION['messageAlert']['type'] = "success";

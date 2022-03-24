@@ -37,11 +37,16 @@
 					<span style="float: right;">					
 					<a href="index.php?uc=post&action=update&idPost=' . $post->getIdPost() . '"><button type="button" class="btn btn-success" id="' . $post->getIdPost() . '"><i class="fa fa-pencil"></i></button></a>
 					<button type="button" class="btn btn-danger" id="' . $post->getIdPost() . '" data-toggle="modal" data-target="#ModalSuppression" data-whatever="@mdo" onClick="ChangeModalLink(' . $post->getIdPost() . ')"><i class="fa fa-trash"></i></button>
-					</span>
-					<p><small>Posté le ' . $post->getCreationDate() . '</small></p>
+					</span>';
+					if ($post->getCreationDate() == $post->getModificationDate()) {
+						echo '<p><small>Posté le ' . $post->getCreationDate() . '</small></p>
 						</div>';
-					echo '<div class="panel-body">';
-					echo '<p></p>';
+					} else {
+						echo '<p><small>Posté le ' . $post->getCreationDate() . ' (Modifié le : ' .$post->getModificationDate() . ')</small></p>
+						</div>';
+					}
+					
+					echo '<div class="panel-body">';					
 
 					$showMediaByPostId = Media::getMediaByPostId($post->getIdPost());
 					$countMedia = 0;
@@ -55,13 +60,13 @@
 								break;
 							case "video":
 								// Vidéos
-								echo '<video width="320" height="240" autoplay loop muted controls>
+								echo '<video class="media-object pull-left" width="320" height="240" autoplay loop muted controls>
 								<source src="upload/' . $media->getNomMedia() . '" type="' . $media->getTypeMedia() . '" />
 							  	</video>';
 								break;
 							case "audio":
 								// Audios
-								echo '<audio controls>
+								echo '<audio class="media-object pull-left" controls>
 								<source src="upload/' . $media->getNomMedia() . '" type="' . $media->getTypeMedia() . '">
 							  	</audio>';
 								break;
