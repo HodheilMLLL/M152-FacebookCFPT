@@ -12,6 +12,10 @@ switch ($action) {
     case 'show':
         include 'vues/post.php';
         break;
+
+        //-----------------------------------------------------
+        // Création de post
+        //-----------------------------------------------------
     case 'post':
         // Lancement de la transaction
         MonPdo::getInstance()->beginTransaction();
@@ -100,7 +104,13 @@ switch ($action) {
         }
         include 'vues/post.php';
         break;
-    case 'delete': // Suppression d'un post
+        // -- Fin création de post --
+
+
+        //-----------------------------------------------------
+        // Suppression de post
+        //-----------------------------------------------------
+    case 'delete':
         // Récupère l'id du post à supprimer
         $idPost = filter_input(INPUT_GET, 'idPost');
 
@@ -134,6 +144,12 @@ switch ($action) {
 
         include 'vues/home.php';
         break;
+        // -- Fin suppression de post -- 
+
+
+        //-----------------------------------------------------
+        // Suppression de media
+        //-----------------------------------------------------
     case 'deleteMedia':
         // Récupère l'id du media à supprimer
         $idMedia = filter_input(INPUT_GET, 'idMedia');
@@ -168,10 +184,21 @@ switch ($action) {
         }
         include 'vues/update.php';
         break;
+        // -- Fin suppression de media --
+
+
+        //-----------------------------------------------------
+        // Page de modification de post
+        //-----------------------------------------------------
     case 'update': // Affichage de la page de modification
         include 'vues/update.php';
         break;
-    case 'confirmUpdate': // Modification d'un post
+        // -- Fin page modification de post
+
+        //-----------------------------------------------------
+        // Confirmation de modification de post
+        //-----------------------------------------------------
+    case 'confirmUpdate':
         $idPost = filter_input(INPUT_GET, 'idPost');
         $commentaire = filter_input(INPUT_POST, 'commentaire', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
@@ -269,4 +296,5 @@ switch ($action) {
         }
         include 'vues/update.php';
         break;
+        // -- Fin confirmation de modification de post --
 }
